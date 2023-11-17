@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import ugradio
 
-def stats(ntime=2048, sample_rate=2.2e6):
+def stats(ntimes=2048, sample_rate=2.2e6):
     
     t = np.arange(ntimes)/sample_rate
     
