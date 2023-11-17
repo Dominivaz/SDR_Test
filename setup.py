@@ -1,15 +1,15 @@
 from setuptools import setup
 
 setup_args = {
-    'name': 'SDR_Testing', 
+    'name': 'SDR_Test', 
     'author': 'Dominic',
-    'url': 'https://github.com/Dominivaz/module_test.git',
+    'url': 'https://github.com/Dominivaz/SDR_Test.git',
     'license': 'bsd',
-    'description': 'SDR Testing',
+    'description': 'SDR Test',
     'version': '1.0.1',
     'install_requires': ['numpy>=1.14'],
-    'package_dir': {'SDR_Testing':'SDR_Testing'},
-    'packages': ['SDR_Testing'],
+    'package_dir': {'SDR_Test':'SDR_Test'},
+    'packages': ['SDR_Test'],
 }
 
 if __name__ == '__main__':
