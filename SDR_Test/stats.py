@@ -2,9 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import ugradio
 
-def stats(ntime=2048, nblocks=10, sample_rate=2.2e6, nu=1e4):
-    
-    sdr = ugradio.sdr.SDR(nsamples = ntimes, nblocks=nblocks, direct = False, sample_rate = sample_rate)
+def stats(ntime=2048, sample_rate=2.2e6):
     
     t = np.arange(ntimes)/sample_rate
     
@@ -12,7 +10,7 @@ def stats(ntime=2048, nblocks=10, sample_rate=2.2e6, nu=1e4):
     
     data = sdr.capture_data()
     
-    data = np.mean(data, axis=0)
+    data = np.mean(data, axis=1)
     
     fft = np.fft.fft(data)
     
