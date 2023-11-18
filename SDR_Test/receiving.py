@@ -7,7 +7,7 @@ import time
 
 dac.raw_value = 2047
 sdr = ugradio.sdr.SDR(sample_rate = 3.2e6)
-HOST = 'ip on ethernet pi'
+HOST = '169.254.204.222'
 PORT = 2001
 receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 receiver_socket.bind((HOST, PORT))

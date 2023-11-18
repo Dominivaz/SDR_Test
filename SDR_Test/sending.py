@@ -8,7 +8,7 @@ import time
 sdr = ugradio.sdr.SDR(sample_rate = 3.2e6)
 
 sender_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-HOST = 'ip on ethernet pi'
+HOST = '169.254.204.222'
 PORT = 2001
 sender_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sender_socket.connect((HOST, PORT))

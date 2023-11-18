@@ -10,7 +10,7 @@ def stats(x, ntimes=2048, sample_rate=3.2e6, nblocks=10):
     
     data = x
     
-    data = np.mean(data, axis=0)
+#     data = np.mean(data, axis=0)
     
     fft = np.fft.fft(data)
     
@@ -37,7 +37,10 @@ def stats(x, ntimes=2048, sample_rate=3.2e6, nblocks=10):
     period = np.median(np.diff(np.where(data==np.max(data))))
     frequency = 1/period
     
-    print('V_pp:', V_pp)
+    print('\nV_max:', max_point)
+    print('\nV_min:', min_point)
+    
+    print('\nV_pp:', V_pp)
     print('\nV_rms:', V_rms)
     
     print('\nPeriod:', period)
