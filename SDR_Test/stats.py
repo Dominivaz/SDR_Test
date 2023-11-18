@@ -2,13 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import ugradio
 
-def stats(ntimes=2048, sample_rate=3.2e6, nblocks=10):
+def stats(x, ntimes=2048, sample_rate=3.2e6, nblocks=10):
     
     t = np.arange(ntimes)/sample_rate
     
     freqs = np.fft.fftfreq(t.size, np.median(np.diff(t)))
     
-    data = sdr.capture_data(nblocks=nblocks)
+    data = x
     
     data = np.mean(data, axis=0)
     
