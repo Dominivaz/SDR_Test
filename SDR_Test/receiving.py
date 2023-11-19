@@ -1,21 +1,28 @@
+import numpy as np
 import socket
 import pickle
 import ugradio
 import SDR_Test
 import datetime
 import time
+import board
+import busio
+import adafruit_mcp4725
 
-dac.raw_value = 2047
+i2c = busio.I2C(board.SCL, board.SDA)
+dac = adafruit_mcp4725(i2c)
+
+dac.raw_value = 2010
 sdr = ugradio.sdr.SDR(sample_rate = 3.2e6)
-HOST = '169.254.204.222'
+HOST = '10.32.92.219'
 PORT = 2001
 receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 receiver_socket.bind((HOST, PORT))
-receiver_socket.listen(1)
+receiver_socket.listen(1)#move into loop?
 
 addr = 0
 
-conn, addr = receiver_socket.accept()
+conn, addr = receiver_socket.accept()#move into loop?
 
 start = 2
 syncing = 2
@@ -33,14 +40,19 @@ try:
     while start == 3:
         
 #            save = 1
-        
-        data = sdr.capture_data(nsamples = 2048, nblocks = 10)
-        data = np.mean(data, axis = 0)
-        
-        data1 = conn.recv(4096)#change, either account for less bytes recieved, or use exact for the amount in an array
-        data1 = pickle.loads(data1)
+        print('capturing data')
+        data = sdr.capture_data(nsamples = 2048, nblocks = 1)
+#         data = np.mean(data, axis = 0)
+        data = data[0]
+        print('data captured')
+        data1 = conn.recv(4096)#change, or use exact for the amount in an array; 64 bytes per 1 block sample
+        data1 = data1.decode()
+        print('received data')
+        data1 = eval(data1)
+        print('converted received data')
         
         x = data*data1
+        print('mixed')
         d_f = SDR_Test.receive_fitting(x)
         changing = SDR_Test.receive_sync(d_f)
         dac.raw_value += changing
