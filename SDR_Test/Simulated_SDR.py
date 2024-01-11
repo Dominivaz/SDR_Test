@@ -1,9 +1,10 @@
 import numpy as np
 
 class SDR:
-    def __init__(self, sample_freq, sample_rate):
+    def __init__(self, sample_freq, sample_rate, nblocks):
         self.sample_freq = sample_freq
         self.sample_rate = sample_rate
+        self.nblocks = nblocks
     
     def hello(self):#
         print('hello')#
@@ -14,8 +15,11 @@ class SDR:
         return self.sin
     
     def capture(self):
+        blocks = []
         sample = int(np.round(self.sample_freq/self.sample_rate))
         print(sample)
-        x = self.data()
-        print(x.shape)
-        return x[::sample]
+        for i in range(self.nblocks):
+            x = self.data()
+            blocks.append(x)
+        blocks = np.array(blocks)
+        return blocks[:,::sample]
