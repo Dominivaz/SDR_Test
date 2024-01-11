@@ -1,3 +1,5 @@
+import numpy as np
+
 class SDR:
     def __init__(self, sample_freq, sample_rate):
         self.sample_freq = sample_freq
