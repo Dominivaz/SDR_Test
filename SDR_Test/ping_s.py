@@ -5,9 +5,6 @@ import ugradio
 import SDR_Test
 import datetime
 import time
-import board
-import busio
-import adafruit_mcp4725
 import subprocess
 
 def ping(host):
@@ -20,7 +17,7 @@ def ping(host):
 
 def ping_func():
     data = sdr.capture_data(nsamples=2048,nblocks=1)
-    data = data[0]
+    data = data
     data = pickle.dumps(data)
     sender_socket.sendall(data)
     current_time = datetime.datetime.now()
@@ -29,12 +26,13 @@ def ping_func():
     print('Data Sent...')
     
 def save():
+    global times
     if len(times) <= 10:
         print('Will Save at 10:', len(times))
         return
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime('%Y-%m-%d_%H-%M-%S')
-    np.save(f'home/pi/rec_times/time_{timestamp}', np.array(times, dtype='object'))
+    np.save(f'/home/pi/rec_times/time_{timestamp}', np.array(times, dtype='object'))
     times = []
     print('saved!')
     
@@ -65,6 +63,6 @@ except KeyboardInterrupt:
     print('Saving and closing.')
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime('%Y-%m-%d_%H-%M-%S')
-    np.save(f'home/pi/rec_times/time_{timestamp}', np.array(times, dtype='object'))
+    np.save(f'/home/pi/rec_times/time_{timestamp}', np.array(times, dtype='object'))
     sender_socket.close()
     print('Done!')

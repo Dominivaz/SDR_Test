@@ -15,19 +15,25 @@ def ping_start(client):
 
 def data_aqu():
     data = sdr.capture_data(nsamples=2048,nblocks=1)
-    data = data[0]
+    data = data
     print('Collected Data...')
-    data1 = conn.recv(4096)
+    data1 = []
+    while True:
+        packet = conn.recv(4096)
+        if not packet: break
+            data1.append(packet)
     print('Received Data...')
+    data1 = np.array(data1)
     data1 = pickle.loads(data1)
     print('Transcribed Data...')
     x = data*data1
     return x
 
 def algorithm():
-    d_f = SDR_Test.receive_fitting(data_aqu())
-    changing = SDR_Test.receive_sync(d_f)
-    dac.raw_value += changing
+    mix = data_aqu()
+    d_f = SDR_Test.receive_sync.receive_fitting(mix, mix.shape[1])
+    changing = SDR_Test.receive_sync.receive_sync(d_f)
+    dac.raw_value += int(changing)
     print('DAC Value Changed...')
     dac_values.append(dac.raw_value)
 
@@ -38,14 +44,15 @@ def save():
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime('%Y-%m-%d_%H-%M-%S')
     print(f'saved on {timestamp}')
-    np.save(f'home/pi/dac_values/data/dac_values_{timestamp}', np.array(dac_values))
+    np.save(f'/home/pi/dac_values/data/dac_values_{timestamp}', np.array(dac_values))
+    dac_values = []
     print('saved!')
     
 ####################################    
 
 print('Script Started...')
 i2c = busio.I2C(board.SCL, board.SDA)
-dac = adafruit_mcp4725(i2c)
+dac = adafruit_mcp4725.MCP4725(i2c)
 
 dac.raw_value = 2010
 sdr = ugradio.sdr.SDR(sample_rate = 3.2e6)
@@ -76,7 +83,7 @@ except KeyboardInterrupt:
     print('Closing Connections and Saving Last Iteration...')
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime('%Y-%m-%d_%H-%M-%S')
-    np.save(f'home/pi/dac_values/data/dac_values_{timestamp}', np.array(dac_values))
+    np.save(f'/home/pi/dac_values/data/dac_values_{timestamp}', np.array(dac_values))
     print('Saved Last Iteration...')
     conn.close()
     receiver_socket_close()
