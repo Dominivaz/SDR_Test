@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def receive_fitting(x, ntimes, f_sample=28.8e6, tone=1e6, pad=8):
+def receive_fitting(x, ntimes, start, stop, f_sample=28.8e6, tone=1e6, pad=8):
     
-    t = np.arange(2048)/f_sample
+    t = np.arange(start, stop)/f_sample
     lo = np.cos(2*np.pi*t*tone)-1j*np.sin(2*np.pi*t*tone)#
     wave = x[300:-300]
     z = wave*lo[300:-300]#
