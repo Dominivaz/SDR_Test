@@ -47,8 +47,11 @@ def receive_fitting(x, ntimes, start, stop, f_sample=28.8e6, tone=1e6, pad=8, sh
 def receive_sync(d_f):
     max_freq = 28801126
     min_freq = 28799479
+    #max_freq = 28800979
+    #min_freq = 28799812
     freq_range = max_freq-min_freq
     bit_amount = 4096
+    #bit_amount = 3276
     diff = freq_range/bit_amount
     changing = np.round((d_f/diff))
     return changing
