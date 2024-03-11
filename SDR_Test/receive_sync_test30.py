@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 def receive_fitting(x, ntimes, start, stop, f_sample=28.8e6, tone=1e6, pad=8, shave=300):
     
     t = np.arange(start, stop)/f_sample
-    y = np.pi*tone
-    lo = np.cos(2*y*t)-1j*np.sin(2*y*t)#
+    y = 2*np.pi*tone
+    lo = np.cos(y*t)-1j*np.sin(y*t)#
     wave = x[shave:-shave]
     mw = wave*lo[shave:-shave]#
 
