@@ -18,10 +18,10 @@ def files(file_number):
 parser = ArgumentParser(description = 'files', formatter_class = ArgumentDefaultsHelpFormatter)
 
 parser.add_argument('-f', dest = 'file_number_', type = int, help = 'File number for data')
-parser.add_argument('-n', dest = 'fs_number_', type = int, help = 'Sampling frequency for SDR in MHz')
+parser.add_argument('-n', dest = 'fs_number_', type = float, help = 'Sampling frequency for SDR in MHz')
 parser.add_argument('-s', dest = 'sample_number_', type = int, help = 'nsamples for SDR')
 parser.add_argument('-b', dest = 'block_number_', type = int, help = 'nblocks for SDR')
-parser.add_argument('-t', dest = 'tone_number_', type = int, help = 'Frequency being sampled in MHz')
+parser.add_argument('-t', dest = 'tone_number_', type = float, help = 'Frequency being sampled in MHz')
 
 args = parser.parse_args()
 file_number = args.file_number_
@@ -31,6 +31,8 @@ block_number = args.block_number_
 tone_number = args.tone_number_ * 1e6
 file_number = str(file_number) + '/'
 
+
+
 files(file_number)
 blocks = block_number
 tone = tone_number
@@ -38,11 +40,13 @@ fs = fs_number
 samples = sample_number
 beginning = 0
 end = samples*blocks
+
+file_counter = 0
 num = 0
 limit = 100
 
 i2c = busio.I2C(board.SCL, board.SDA)
-dac = adafruit_mcp4725.MCP4725(self.i2c)
+dac = adafruit_mcp4725.MCP4725(i2c)
 dac.raw_value = 0
 sdr = ugradio.sdr.SDR(sample_rate = fs, direct=True)
 
@@ -65,6 +69,7 @@ while True:
     df_values.append(df)
     
     num += 1
+    print(num)
     if num == limit:
         current_time = datetime.datetime.now()
         timestamp = current_time.strftime('%Y-%m-%d_%H-%M-%S')
@@ -79,3 +84,5 @@ while True:
         wave_values = []
         df_values = []
         num = 0
+        file_counter += 1
+        print('Number of times saved:', file_counter)
