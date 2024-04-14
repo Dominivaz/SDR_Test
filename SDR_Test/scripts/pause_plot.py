@@ -107,40 +107,46 @@ if args.p4:
     plt.figure()
     plt.plot(unix, df, label = 'df')
     plt.legend()
-    plt.xlabel('unix')
+    plt.xlabel('Unix')
     plt.ylabel('Calculated df from 2.2 MHz')
+    plt.show()
     
 if args.p5:
     plt.figure()
     plt.plot(unix[cut:], dac[cut:], label = 'Dac')
     plt.legend()
-    plt.xlabel('unix')
+    plt.xlabel('Unix')
     plt.ylabel('Bits')
+    plt.show()
 
 if args.p6:
     plt.figure()
-    plt.plot(unix[cut:], f_sample_prime[cut:], label = 'df')
+    plt.plot(unix[cut:], f_sample_prime, label = 'df')
     plt.legend()
-    plt.xlabel('unix')
+    plt.xlabel('Unix')
     plt.ylabel('Calculated Clock Frequency')
+    plt.show()
     
 if args.p7:
     plt.figure()
     plt.plot(seconds, df, label = 'df')
     plt.legend()
-    plt.xlabel('unix')
+    plt.xlabel('Seconds')
     plt.ylabel('Calculated df from 2.2 MHz')
+    plt.show()
     
 if args.p8:
     plt.figure()
     plt.plot(seconds[cut:], dac[cut:], label = 'Dac')
     plt.legend()
-    plt.xlabel('unix')
+    plt.xlabel('Seconds')
     plt.ylabel('Bits')
+    plt.show()
 
 if args.p9:
     plt.figure()
-    plt.plot(seconds[cut:], f_sample_prime[cut:], label = 'df')
+    plt.plot(seconds[cut:], f_sample_prime, label = 'df')
     plt.legend()
-    plt.xlabel('unix')
+    plt.xlabel('Seconds')
     plt.ylabel('Calculated Clock Frequency')
+    plt.show()
