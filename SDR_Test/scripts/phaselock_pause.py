@@ -22,7 +22,7 @@ parser.add_argument('-f', dest = 'file_number_', type = int, help = 'File number
 parser.add_argument('-n', dest = 'fs_number_', type = float, default = 2.2, help = 'Sampling frequency for SDR in MHz')
 parser.add_argument('-s', dest = 'sample_number_', type = int, default = 8192, help = 'nsamples for SDR')
 parser.add_argument('-b', dest = 'block_number_', type = int, default = 20, help = 'nblocks for SDR')
-parser.add_argument('-t', dest = 'tone_number_', type = float, default = .2e6, help = 'Frequency being sampled in MHz')
+parser.add_argument('-t', dest = 'tone_number_', type = float, default = .2, help = 'Frequency being sampled in MHz')
 parser.add_argument('-u', dest = 'time_number_', type = int, default = 60, help = 'Amount of time between sampling frequency changes in seconds')
 
 args = parser.parse_args()
@@ -103,7 +103,7 @@ while offset > .4:
 
 
 ###
-print('Locking ended, waiting 60 seconds to sync...')
+print('Locking ended, waiting '+ str(wait) +' seconds to sync...')
 
 start_time = time.time()
 end_time = time.time()
