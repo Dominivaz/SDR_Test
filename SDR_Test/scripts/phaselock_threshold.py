@@ -32,7 +32,7 @@ sample_number = args.sample_number_
 block_number = args.block_number_
 tone_number = args.tone_number_ * 1e6
 file_number = str(file_number) + '/'
-time_number = args.time_number_
+phase_number = args.phase_number_
 
 
 
