@@ -23,7 +23,7 @@ parser.add_argument('-n', dest = 'fs_number_', type = float, default = 2.2, help
 parser.add_argument('-s', dest = 'sample_number_', type = int, default = 8192, help = 'nsamples for SDR')
 parser.add_argument('-b', dest = 'block_number_', type = int, default = 20, help = 'nblocks for SDR')
 parser.add_argument('-t', dest = 'tone_number_', type = float, default = .2, help = 'Frequency being sampled in MHz')
-parser.add_argument('-p', dest = 'phase_number_', type = int, default = 2, help = 'Max and min phase difference allowed before syncing')
+parser.add_argument('-p', dest = 'phase_number_', type = float, default = 2, help = 'Max and min phase difference allowed before syncing in Hz')
 
 args = parser.parse_args()
 file_number = args.file_number_
@@ -103,7 +103,7 @@ while offset > .4:
 
 
 ###
-print('Locking ended, waiting for'+ str(threshold) +' phase difference...')
+print('Locking ended, waiting for '+ str(threshold) +' phase difference...')
 
 start_time = time.time()
 end_time = time.time()
