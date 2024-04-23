@@ -45,11 +45,6 @@ def save(dac_values, df_values, wave_values, unix_values):
     print(f'saved on {timestamp}')    
     print('saved!')
     
-def reset(dac_values,wave_values,df_values,unix_values):
-    dac_values = []
-    wave_values = []
-    df_values = []
-    unix_values = []
 
     
 parser = ArgumentParser(description = 'files', formatter_class = ArgumentDefaultsHelpFormatter)
@@ -109,7 +104,10 @@ while offset[0] > .4:
     print(num)
     if num == limit:
         save(dac_values,df_values,wave_values,unix_values)
-        reset(dac_values,wave_values,df_values,unix_values)
+        dac_values = []
+        wave_values = []
+        df_values = []
+        unix_values = []
         num = 0
         file_counter += 1
         print('Number of times saved:', file_counter)
@@ -133,7 +131,10 @@ while True:
     print(num)
     if num == limit:
         save(dac_values,df_values,wave_values,unix_values)
-        reset(dac_values,wave_values,df_values,unix_values)
+        dac_values = []
+        wave_values = []
+        df_values = []
+        unix_values = []
         num = 0
         file_counter += 1
         print('Number of times saved:', file_counter)
