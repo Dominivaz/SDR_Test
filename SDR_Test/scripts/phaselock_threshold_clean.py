@@ -22,19 +22,19 @@ def sampling(nsamples, nblocks, tone, start, stop):
     df = SDR_Test.receive_sync_test30.receive_fitting(data, amount, start, stop, f_sample = sdr.get_sample_rate(), tone = tone)
     start += amount
     stop += amount
-    return df
+    return df, data
 
 def DAC_change(diff):
     changing = SDR_Test.receive_sync_test30.receive_sync(diff)
     dac.raw_value += int(changing)
     
-def appending():
+def appending(data, diff, time):
     dac_values.append(dac.raw_value)
     wave_values.append(data)
-    df_values.append(offset)
-    unix_values.append(lock_time)
+    df_values.append(diff)
+    unix_values.append(time)
     
-def save():
+def save(dac_values, df_values, wave_values, unix_values):
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime('%Y-%m-%d_%H-%M-%S')
         
@@ -45,7 +45,7 @@ def save():
     print(f'saved on {timestamp}')    
     print('saved!')
     
-def reset():
+def reset(dac_values,wave_values,df_values,unix_values):
     dac_values = []
     wave_values = []
     df_values = []
@@ -97,19 +97,19 @@ unix_values = []
 
 ###
 
-offset = 10
+offset = sampling(samples,blocks,tone,beginning,end)
 
-while offset > .4:
+while offset[0] > .4:
     print('Locking')
     offset = sampling(samples,blocks,tone,beginning,end)
-    DAC_change(offset)
+    DAC_change(offset[0])
     lock_time = time.time()
-    appending()
+    appending(offset[1], offset[0],lock_time)
     num += 1
     print(num)
     if num == limit:
-        save()
-        reset()
+        save(dac_values,df_values,wave_values,unix_values)
+        reset(dac_values,wave_values,df_values,unix_values)
         num = 0
         file_counter += 1
         print('Number of times saved:', file_counter)
@@ -123,17 +123,17 @@ end_time = time.time()
 
 while True:
     df = sampling(samples,blocks,tone,beginning,end)
-    if abs(df) > threshold:
-        DAC_change(df)
+    if abs(df[0]) > threshold:
+        DAC_change(df[0])
         start_time = time.time()
         print('Adjusted DAC')
     end_time = time.time()
-    appending()
+    appending(df[1], df[0], end_time)
     num += 1
     print(num)
     if num == limit:
-        save()
-        reset()
+        save(dac_values,df_values,wave_values,unix_values)
+        reset(dac_values,wave_values,df_values,unix_values)
         num = 0
         file_counter += 1
         print('Number of times saved:', file_counter)
