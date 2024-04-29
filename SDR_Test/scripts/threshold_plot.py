@@ -78,7 +78,7 @@ f_sample_prime = diff*dac[cut:] + min_freq
 seconds_ = unix[-1] - unix[0]
 seconds = np.linspace(0, seconds_, len(unix))
 
-print('Sampled for:' + seconds_ + 'seconds')
+print('Sampled for: ' + str(seconds_) + ' seconds')
 
 if args.p1:
     plt.figure()
