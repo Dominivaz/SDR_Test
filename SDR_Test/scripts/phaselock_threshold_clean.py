@@ -27,6 +27,7 @@ def sampling(nsamples, nblocks, tone, start, stop):
 def DAC_change(diff):
     changing = SDR_Test.receive_sync_test30.receive_sync(diff)
     dac.raw_value += int(changing)
+    print(dac.raw_value)
     
 def appending(data, diff, time):
     dac_values.append(dac.raw_value)

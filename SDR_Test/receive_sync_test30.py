@@ -26,12 +26,13 @@ def receive_fitting(x, ntimes, start, stop, f_sample=28.8e6, tone=1e6, pad=8, sh
     
     
     if i != 0:
-        print('broke')
-        return 0
-        #reset = (np.conjugate(mw_fft[0])/np.abs(mw_fft[0]))#
+        #print('broke')
+        #return 0
+        reset = (np.conjugate(mw_fft[0])/np.abs(mw_fft[0]))#
         
-        #d_f = (f_sample/(tone))*FREQS_z[i]
-        #return d_f
+        d_f = (f_sample/(tone))*FREQS_z[i]
+        print(f'{d_f=}')
+        return d_f
     else:
         reset = (np.conjugate(mw_fft[i])/np.abs(mw_fft[i]))
         big = ((reset)*(mw))
