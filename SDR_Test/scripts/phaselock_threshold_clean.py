@@ -10,12 +10,34 @@ import os
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
 def files(file_number):
+    """
+    Creates file directory
+    
+    Parameters:
+    file_number (int): Number to name file in the directory
+    
+    """
     os.mkdir('/home/radiopi/sync_data/sdr/threshold/dac_values' + file_number)
     os.mkdir('/home/radiopi/sync_data/sdr/threshold/d_f_values' + file_number)
     os.mkdir('/home/radiopi/sync_data/sdr/threshold/wave_values' + file_number)
     os.mkdir('/home/radiopi/sync_data/sdr/threshold/unix_values' + file_number)
     
 def sampling(nsamples, nblocks, tone, start, stop):
+    """
+    Samples and concatenates data, calculates difference frequency, then adds to time for simulated wave
+    
+    Parameters:
+    nsamples (int): Number of samples from SDR
+    nblocks (int): Number of blocks from SDR
+    tone (float): Known frequency from injected signal
+    start (int): Sample number that the simulated wave starts with
+    stop (int): sample number that the simulated ends with
+    
+    Returns:
+    df (float): difference frequency calculated from receive_fitting function
+    data (list): Compiled data sampled from SDR
+    
+    """
     data = sdr.capture_data(nsamples=nsamples,nblocks=nblocks)
     data = np.concatenate(data)
     amount = data.size
@@ -25,17 +47,44 @@ def sampling(nsamples, nblocks, tone, start, stop):
     return df, data
 
 def DAC_change(diff):
+    """
+    Converts difference frequency to bit values using receive_sync function, then adds those changes to DAC bits
+    Total bits have to be between 0 and 4095, errors occur otherwise
+    
+    Parameters:
+    diff (float): Difference frequency calculated between 2 clock sources
+    
+    """
     changing = SDR_Test.receive_sync_test30.receive_sync(diff)
     dac.raw_value += int(changing)
     print(dac.raw_value)
     
-def appending(data, diff, time):
+def appending(data, diff, time): ### uses global variables, will change later
+    """
+    Appends sampled data, dac, unix, and difference frequency values to be saved
+    
+    Parameters:
+    data (list): Sampled data from SDR
+    diff (list): Calculated difference frequencies
+    time (list): Unix times
+    
+    """
     dac_values.append(dac.raw_value)
     wave_values.append(data)
     df_values.append(diff)
     unix_values.append(time)
     
 def save(dac_values, df_values, wave_values, unix_values):
+    """
+    Saves currently appended DAC, difference frequency, sampled data, and unix values
+    
+    Parameters:
+    dac_values (list): List of bit values DAC is set to
+    df_values (list): List of difference frequencies
+    wave_values (list): List of data sampled from SDR
+    unix_values (list): List of unix values
+    
+    """
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime('%Y-%m-%d_%H-%M-%S')
         
@@ -47,6 +96,8 @@ def save(dac_values, df_values, wave_values, unix_values):
     print('saved!')
     
 
+    
+# Parser settings for terminal
     
 parser = ArgumentParser(description = 'files', formatter_class = ArgumentDefaultsHelpFormatter)
 
@@ -77,6 +128,8 @@ beginning = 0
 end = samples*blocks
 threshold = phase_number
 
+# Initializing i2c, DAC, SDR, and setting limits for saving
+
 file_counter = 0
 num = 0
 limit = 100
@@ -93,9 +146,14 @@ unix_values = []
 
 ###
 
+# Collecting current difference frequency
 offset = sampling(samples,blocks,tone,beginning,end)
 
 while offset[0] > .4:
+    
+    # While loop that attempts to phaselock sdr clock to tone until the 
+    #difference frequency calculated is bellow .4 Hz, the smallest change 
+    #change that the DAC is capable of
     print('Locking')
     offset = sampling(samples,blocks,tone,beginning,end)
     DAC_change(offset[0])
@@ -121,6 +179,10 @@ start_time = time.time()
 end_time = time.time()
 
 while True:
+    # While loop that calculates difference frequency between the tone and sample frequency
+    #of the SDR, then changes clock frequency if the difference frequency
+    #reaches a specified value from terminal. If the difference frequency is smaller than
+    #the specified value, no changes will be done to the DAC.
     df = sampling(samples,blocks,tone,beginning,end)
     if abs(df[0]) > threshold:
         DAC_change(df[0])
